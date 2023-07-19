@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBook = exports.updateBook = exports.getAll = exports.addBook = void 0;
+exports.getPage = exports.deleteBook = exports.updateBook = exports.getBook = exports.getAll = exports.addBook = void 0;
 const books_1 = __importDefault(require("../models/books"));
 const validation_1 = require("../utilities/validation");
 //==========================ADD BOOK===========================
@@ -48,6 +48,7 @@ const addBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             if (mainBook) {
                 return res.status(200).json({
                     message: `Book created successfully`,
+                    mainBook
                 });
             }
             return res.status(401).json({
@@ -88,6 +89,26 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAll = getAll;
+//===================================GET ONE BOOK================================
+const getBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { title } = req.body;
+        const getoneBook = yield books_1.default.find({ title });
+        if (!getoneBook) {
+            return res.status(400).json("SORRY!! No book found");
+        }
+        if (getoneBook) {
+            return res.status(200).json({
+                message: "Book gotten successfully",
+                getoneBook
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+exports.getBook = getBook;
 //==========================UPDATE BOOK===========================
 const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -150,3 +171,32 @@ const deleteBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteBook = deleteBook;
+const getPage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let page = 1;
+        if (req.query.page) {
+            page = parseInt(req.query.page);
+            if (Number.isNaN(page)) {
+                return res.status(400).json({
+                    message: 'Invalid page number'
+                });
+            }
+        }
+        const pageSize = 5;
+        const skip = (page - 1) * pageSize;
+        const totalCount = yield books_1.default.countDocuments();
+        const totalPages = Math.ceil(totalCount / pageSize);
+        const books = yield books_1.default.find().skip(skip).limit(pageSize);
+        return res.status(200).json({
+            books,
+            currentPage: page,
+            totalPages,
+        });
+    }
+    catch (err) {
+        return res.status(500).json({
+            error: "Internal Server Error",
+        });
+    }
+});
+exports.getPage = getPage;

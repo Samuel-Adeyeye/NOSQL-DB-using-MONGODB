@@ -43,6 +43,7 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 yield (0, notification_1.sendmail)(`${process.env.GMAIL_USER}`, email, "Welcome", html);
                 return res.status(200).json({
                     message: `User created successfully`,
+                    mainUser
                 });
             }
             return res.status(401).json({
@@ -106,7 +107,10 @@ const getuser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 });
 exports.getuser = getuser;
@@ -125,7 +129,11 @@ const getoneuser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
     catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
+        ;
     }
 });
 exports.getoneuser = getoneuser;
@@ -147,7 +155,10 @@ const updateuser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
     catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 });
 exports.updateuser = updateuser;
@@ -167,7 +178,10 @@ const deleteuser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
     catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 });
 exports.deleteuser = deleteuser;

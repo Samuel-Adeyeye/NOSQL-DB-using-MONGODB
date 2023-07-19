@@ -42,6 +42,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
                 await sendmail(`${process.env.GMAIL_USER}`, email, "Welcome", html);
                 return res.status(200).json({
                     message: `User created successfully`,
+                    mainUser
                 });
             }
             return res.status(401).json({
@@ -110,7 +111,10 @@ export const getuser = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 
 };
@@ -133,7 +137,10 @@ export const getoneuser = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });;
     }
 
 };
@@ -158,7 +165,10 @@ export const updateuser = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 
 };
@@ -180,7 +190,10 @@ export const deleteuser = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            message: `Internal Server Error`,
+            Error: '/users/login'
+        });
     }
 
 };

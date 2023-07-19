@@ -1,5 +1,5 @@
 {
-  "name": "week-9-task-Samuel-Adeyeye",
+  "name": "week-9-task-samuel-adeyeye",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,9 +7,11 @@
     "start": "node  app",
     "dev": "nodemon dist/app.js",
     "test": "jest",
+    "build": "tsc",
     "compile": "tsc -w"
   },
   "dependencies": {
+    "@types/node": "^20.4.2",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
@@ -20,6 +22,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
     "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6",
     "zod": "^3.21.4"
   },
@@ -33,6 +36,7 @@
     "@types/nodemailer": "^6.4.8",
     "@types/supertest": "^2.0.12",
     "bcryptjs": "^2.4.3",
-    "nodemailer": "^6.9.3"
+    "nodemailer": "^6.9.3",
+    "ts-node": "^10.9.1"
   }
 }

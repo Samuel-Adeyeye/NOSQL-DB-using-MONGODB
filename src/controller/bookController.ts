@@ -48,10 +48,12 @@ export const addBook = async (req: Request, res: Response, next: NextFunction) =
             if (mainBook) {
                 return res.status(200).json({
                     message: `Book created successfully`,
+                    mainBook
                 });
             }
             return res.status(401).json({
                 message: `Unable to Create Book`
+                
             });
 
         }
@@ -86,6 +88,30 @@ export const getAll = async(req:Request, res:Response)=>{
         })
     }
 }
+
+//===================================GET ONE BOOK================================
+export const getBook = async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+        const { title } = req.body;
+
+        const getoneBook = await Book.find({ title });
+
+        if (!getoneBook) {
+            return res.status(400).json("SORRY!! No book found");
+        }
+
+        if (getoneBook) {
+            return res.status(200).json({
+                message: "Book gotten successfully",
+                getoneBook
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+};
 
 //==========================UPDATE BOOK===========================
 export const updateBook = async(req:Request, res:Response)=>{
@@ -150,4 +176,37 @@ export const deleteBook = async(req:Request, res:Response)=>{
             Error: '/books/delete'
         })
     }
-}
+};
+
+export const getPage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let page = 1;
+      if(req.query.page){
+        page = parseInt(req.query.page as string)
+      if (Number.isNaN(page)) {
+       return res.status(400).json({
+              message: 'Invalid page number'
+      })
+    }
+      }
+      
+  
+      const pageSize = 5;
+      const skip = (page - 1) * pageSize;
+  
+      const totalCount = await Book.countDocuments();
+      const totalPages = Math.ceil(totalCount / pageSize);
+  
+      const books = await Book.find().skip(skip).limit(pageSize);
+  
+      return res.status(200).json({
+        books,
+        currentPage: page,
+        totalPages,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        error: "Internal Server Error",
+      });
+    }
+  }
